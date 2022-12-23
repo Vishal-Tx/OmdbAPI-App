@@ -1,0 +1,36 @@
+* {
+  margin: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+body {
+  background-color: #d0b8a8;
+}
+
+.movie-card {
+  display: flex;
+  align-items: center;
+  margin: 16px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.movie-card img {
+  width: 200px;
+  height: 300px;
+  object-fit: cover;
+  margin-right: 16px;
+}
+
+/* .movie-info {
+  flex: 1;
+  h3 {
+    margin: 0;
+    font-size: 1.2em;
+  }
+  p {
+    margin: 0;
+    font-size: 0.8em;
+    color: #666;
+  }
+} */

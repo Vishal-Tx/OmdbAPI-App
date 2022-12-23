@@ -1,0 +1,13 @@
+.cardMedia:hover {
+  background-color: transparent;
+  border-radius: 15px;
+  transition: ease-in 200ms;
+}
+
+.card:has(.cardMedia:hover) {
+  overflow: visible;
+}
+
+.card:has(.cardMedia:hover) .cardText {
+  display: none;
+}
