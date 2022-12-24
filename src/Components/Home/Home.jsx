@@ -80,11 +80,12 @@ import Navbar from "../Navbar/Navbar";
 
 const OmdbContainer = () => {
   const [movies, setMovies] = useState([]);
-  const [apiSearchTerm, setApiSearchTerm] = useState("");
+
   const [localSearchTerm, setLocalSearchTerm] = useState("");
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   //   console.log("data", data);
 
@@ -104,29 +105,26 @@ const OmdbContainer = () => {
   let sTerm = dict[randomNumber];
   useEffect(() => {
     setIsLoading(true);
-    // axios
-    //   .get(
-    //     `http://www.omdbapi.com/?apikey=667984e7&y=${currYear}&s="${}"&type="movie"&page=${page}`
-    //   )
-    //   .then((response) => {
-    //     console.log("response", response);
-    //     setMovies((prevMovies) => [...prevMovies, ...response.data.Search]);
-    //     setHasMore(response.data.Search.length > 0);
-    //     setIsLoading(false);
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //     setIsLoading(false);
-    //   });
-    setMovies((prevMovies) => [...prevMovies, ...data]);
-    setMovies((prevMovies) => [...data]);
-  }, [apiSearchTerm, page]);
+    axios
+      .get(
+        `http://www.omddbapi.com/?apikey=667984e7&y=${currYear}&s="${sTerm}"&type="movie"&page=${page}`
+      )
+      .then((response) => {
+        console.log("response", response);
+        if (response.data?.Response === "False") return setHasMore(false);
+        else setHasMore(true);
+        setMovies((prevMovies) => [...prevMovies, ...response?.data?.Search]);
 
-  const handleApiSearch = (event) => {
-    setApiSearchTerm(event.target.value);
-    setPage(1);
-    setMovies([]);
-  };
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setIsLoading(false);
+        setError("Something went wrong. Please try again!");
+      });
+    // setMovies((prevMovies) => [...prevMovies, ...data]);
+    // setMovies((prevMovies) => [...data]);
+  }, [page]);
 
   const handleLocalSearch = (event) => {
     setLocalSearchTerm(event.target.value);
@@ -140,50 +138,54 @@ const OmdbContainer = () => {
     const regex = new RegExp(localSearchTerm, "i");
     return regex.test(movie.Title);
   });
-
+  console.log("hasMore", hasMore);
   return (
     <>
-      <Navbar />
-      <div>
-        <Typography>Searching for {sTerm}</Typography>
-        <div className="search-container">
-          <input
+      <Navbar setPage={setPage} setMovies={setMovies} page={page} />
+      {error ? (
+        <Box>{error}</Box>
+      ) : (
+        <div>
+          <Typography>Searching for {sTerm}</Typography>
+          <div className="search-container">
+            {/* <input
             type="text"
             value={apiSearchTerm}
             onChange={handleApiSearch}
             placeholder="Search OMDb API..."
-          />
-          <input
-            type="text"
-            value={localSearchTerm}
-            onChange={handleLocalSearch}
-            placeholder="Search among fetched results..."
-          />
-        </div>
-        <InfiniteScroll
-          dataLength={filteredMovies.length}
-          next={handleLoadMore}
-          hasMore={hasMore}
-          loader={<h4>Loading...</h4>}
-          endMessage={
-            <p style={{ textAlign: "center" }}>
-              <b>Yay! You have seen it all</b>
-            </p>
-          }
-        >
-          <Box
-            sx={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "center",
-            }}
+          /> */}
+            <input
+              type="text"
+              value={localSearchTerm}
+              onChange={handleLocalSearch}
+              placeholder="Search among fetched results..."
+            />
+          </div>
+          <InfiniteScroll
+            dataLength={filteredMovies.length}
+            next={handleLoadMore}
+            hasMore={hasMore}
+            loader={<h4>Loading...</h4>}
+            endMessage={
+              <p style={{ textAlign: "center" }}>
+                <b>Yay! You have seen it all</b>
+              </p>
+            }
           >
-            {filteredMovies.map((movie) => (
-              <MovieCard movie={movie} key={movie.imdbID} />
-            ))}{" "}
-          </Box>
-        </InfiniteScroll>
-      </div>
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center",
+              }}
+            >
+              {filteredMovies.map((movie) => (
+                <MovieCard movie={movie} key={movie.imdbID} />
+              ))}{" "}
+            </Box>
+          </InfiniteScroll>
+        </div>
+      )}
     </>
   );
 };
