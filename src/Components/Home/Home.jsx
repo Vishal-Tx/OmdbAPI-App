@@ -6,6 +6,7 @@ import data from "../../assets/data.json";
 import MovieCard from "../Card/MovieCard";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import Navbar from "../Navbar/Navbar";
+
 import "./style.css";
 
 const OmdbContainer = () => {
@@ -33,28 +34,29 @@ const OmdbContainer = () => {
   //   console.log("currYear", currYear);
   //   console.log("randomNumber", randomNumber);
   let sTerm = dict[randomNumber];
+  const key = process.env.REACT_APIKEY;
   useEffect(() => {
     setIsLoading(true);
-    // axios
-    //   .get(
-    //     `http://www.omddbapi.com/?apikey=667984e7&y=${currYear}&s="${sTerm}"&type="movie"&page=${page}`
-    //   )
-    //   .then((response) => {
-    //     console.log("response", response);
-    //     if (response.data?.Response === "False") return setHasMore(false);
-    //     else setHasMore(true);
-    //     setMovies((prevMovies) => [...prevMovies, ...response?.data?.Search]);
+    axios
+      .get(
+        `http://www.omddbapi.com/?apikey=${key}&y=${currYear}&s="${sTerm}"&type="movie"&page=${page}`
+      )
+      .then((response) => {
+        console.log("response", response);
+        if (response.data?.Response === "False") return setHasMore(false);
+        else setHasMore(true);
+        setMovies((prevMovies) => [...prevMovies, ...response?.data?.Search]);
 
-    //     setIsLoading(false);
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //     setIsLoading(false);
-    //     setError("Something went wrong. Please try again!");
-    //   });
-    // setMovies((prevMovies) => [...prevMovies, ...data]);
-    setMovies((prevMovies) => [...data]);
-    setHasMore(false);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setIsLoading(false);
+        setError("Something went wrong. Please try again!");
+      });
+    setMovies((prevMovies) => [...prevMovies, ...data]);
+    // setMovies((prevMovies) => [...data]);
+    // setHasMore(false);
   }, [page]);
 
   const handleLoadMore = () => {
