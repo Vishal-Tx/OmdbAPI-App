@@ -119,8 +119,8 @@ const OmdbContainer = () => {
       })
       .catch((error) => {
         console.error(error);
-        setIsLoading(true);
-        // setError("Something went wrong. Please try again!");
+        setIsLoading(false);
+        setError("Something went wrong. Please try again!");
       });
     // setMovies((prevMovies) => [...prevMovies, ...data]);
     // setMovies((prevMovies) => [...data]);
@@ -143,7 +143,9 @@ const OmdbContainer = () => {
     <>
       <Navbar setPage={setPage} setMovies={setMovies} page={page} />
       {error ? (
-        <Box>{error}</Box>
+        <Box sx={{ textAlign: "center" }}>
+          <Typography>{error}</Typography>
+        </Box>
       ) : (
         <div>
           <Typography>Searching for {sTerm}</Typography>
