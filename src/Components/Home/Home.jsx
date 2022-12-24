@@ -75,7 +75,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import data from "../../assets/data.json";
 import MovieCard from "../Card/MovieCard";
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import Navbar from "../Navbar/Navbar";
 
 const OmdbContainer = () => {
@@ -119,8 +119,8 @@ const OmdbContainer = () => {
       })
       .catch((error) => {
         console.error(error);
-        setIsLoading(false);
-        setError("Something went wrong. Please try again!");
+        setIsLoading(true);
+        // setError("Something went wrong. Please try again!");
       });
     // setMovies((prevMovies) => [...prevMovies, ...data]);
     // setMovies((prevMovies) => [...data]);
@@ -165,7 +165,16 @@ const OmdbContainer = () => {
             dataLength={filteredMovies.length}
             next={handleLoadMore}
             hasMore={hasMore}
-            loader={<h4>Loading...</h4>}
+            loader={
+              <Box
+                sx={{
+                  height: "50px",
+                  textAlign: "center",
+                }}
+              >
+                <CircularProgress sixe={100} />
+              </Box>
+            }
             endMessage={
               <p style={{ textAlign: "center" }}>
                 <b>Yay! You have seen it all</b>
