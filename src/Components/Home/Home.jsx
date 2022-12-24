@@ -4,26 +4,25 @@ import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import data from "../../assets/data.json";
 import MovieCard from "../Card/MovieCard";
-import { Box, CircularProgress, Typography } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Input,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Navbar from "../Navbar/Navbar";
 
 import "./style.css";
+import { useMovie } from "../../hooks/useMovie";
 
 const OmdbContainer = () => {
-  const [movies, setMovies] = useState([]);
-
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [localSearchTerm, setLocalSearchTerm] = useState("");
   const [apiSearchTerm, setApiSearchTerm] = useState("");
 
-  //   console.log("data", data);
-
-  const currYear = useMemo(
-    () => new Date().getFullYear(),
-    [new Date().getFullYear()]
+  const { movies, hasNextPage, fetchNextPage, error } = useMovie(
+    `Movies-${apiSearchTerm}`,
+    { s: apiSearchTerm }
   );
 
   const randomNumber = useMemo(() => {
@@ -32,65 +31,24 @@ const OmdbContainer = () => {
 
   const dict = ["Love", "war", "red", "heart", "Black"];
 
-  //   console.log("currYear", currYear);
-  //   console.log("randomNumber", randomNumber);
   let sTerm = dict[randomNumber];
-  const key = import.meta.env.VITE_APP_APIKEY;
-  console.log("key", import.meta.env);
+
   useEffect(() => {
-    if (apiSearchTerm.length === 0) handleData();
-    // setMovies((prevMovies) => [...prevMovies, ...data]);
-    // setMovies((prevMovies) => [...data]);
-    // setHasMore(false);
-  }, [page, apiSearchTerm]);
-
-  const handleData = async () => {
-    try {
-      if (!hasMore) return;
-      console.log("working...");
-      setIsLoading(true);
-      const response = await axios.get(
-        `http://www.omdbapi.com/?apikey=${key}&y=${currYear}&s="${sTerm}"&type="movie"&page=${page}`
-      );
-      if (movies.length === response.data?.totalResults) setHasMore(false);
-      console.log("response", response);
-
-      if (response.data?.Response === "False") return setHasMore(false);
-      else setHasMore(true);
-      setError(null);
-      setMovies((prevMovies) => [...prevMovies, ...response?.data?.Search]);
-
-      setIsLoading(false);
-    } catch (error) {
-      console.error(error);
-      setIsLoading(false);
-      setError("Something went wrong. Please try again!");
-    }
-  };
-
-  const handleLoadMore = () => {
-    setPage((prevPage) => prevPage + 1);
-  };
+    if (apiSearchTerm.length === 0) setApiSearchTerm(sTerm);
+  }, [apiSearchTerm]);
 
   const filteredMovies = movies.filter((movie) => {
     const regex = new RegExp(localSearchTerm, "i");
     return regex.test(movie.Title);
   });
-  console.log("hasMore", hasMore);
 
   const handleLocalSearch = (event) => {
     setLocalSearchTerm(event.target.value);
   };
+  console.log(movies);
   return (
     <>
-      <Navbar
-        localSearchTerm={localSearchTerm}
-        handleLocalSearch={handleLocalSearch}
-        setMovies={setMovies}
-        setError={setError}
-        apiSearchTerm={apiSearchTerm}
-        setApiSearchTerm={setApiSearchTerm}
-      />
+      <Navbar setApiSearchTerm={setApiSearchTerm} />
       <Box
         sx={{
           ml: { lg: "50px" },
@@ -109,11 +67,36 @@ const OmdbContainer = () => {
       </Box>
       {error ? (
         <Box sx={{ textAlign: "center" }}>
-          <Typography>{error}</Typography>
+          <Typography>{error?.message ?? ""}</Typography>
         </Box>
       ) : (
         <div>
-          <div className="search-container">
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            {/* <Input
+              style={{ margin: "auto" }}
+              type="text"
+              value={localSearchTerm}
+              onChange={handleLocalSearch}
+              placeholder="Search among fetched results..."
+            /> */}
+            <TextField
+              size="small"
+              label="Filter Results"
+              id="fullWidth"
+              value={localSearchTerm}
+              onChange={handleLocalSearch}
+              sx={{
+                m: "auto",
+                backgroundColor: "white",
+                width: "50%",
+                color: "black",
+                borderRadius: "4px",
+                borderColor: "red",
+                "& label.Mui-focused": {
+                  color: "#3C2A21",
+                },
+              }}
+            />
             {/* <input
             type="text"
             value={apiSearchTerm}
@@ -126,11 +109,11 @@ const OmdbContainer = () => {
               onChange={handleLocalSearch}
               placeholder="Search among fetched results..."
             /> */}
-          </div>
+          </Box>
           <InfiniteScroll
-            dataLength={filteredMovies.length}
-            next={handleLoadMore}
-            hasMore={hasMore}
+            dataLength={filteredMovies?.length}
+            next={fetchNextPage}
+            hasMore={hasNextPage && localSearchTerm.length === 0}
             loader={
               <Box
                 sx={{
@@ -141,11 +124,6 @@ const OmdbContainer = () => {
                 <CircularProgress sixe={100} />
               </Box>
             }
-            endMessage={
-              <p style={{ textAlign: "center" }}>
-                <b>Yay! You have seen it all</b>
-              </p>
-            }
           >
             <Box
               sx={{
@@ -155,7 +133,7 @@ const OmdbContainer = () => {
               }}
             >
               {filteredMovies?.map((movie) => (
-                <MovieCard movie={movie} key={movie.imdbID} />
+                <MovieCard movie={movie} key={movie?.imdbID} />
               ))}{" "}
             </Box>
           </InfiniteScroll>

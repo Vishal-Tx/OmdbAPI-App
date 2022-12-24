@@ -16,14 +16,13 @@ const MovieCard = ({ movie }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [imdbID, setImdbID] = useState(null);
-  let modalData;
   const openModal = () => {
     setOpen(true);
     setIsLoading(true);
     // console.log("movie.imdbID", movie.imdbID);
-    setImdbID(movie.imdbID);
+    setImdbID(movie?.imdbID);
   };
-
+  if (!movie) return <></>;
   return (
     <>
       {open && <Details open={open} setOpen={setOpen} imdbID={imdbID} />}
@@ -58,8 +57,8 @@ const MovieCard = ({ movie }) => {
               width: "100%",
               height: "100%",
             }}
-            image={movie.Poster}
-            title={movie.Title}
+            image={movie?.Poster}
+            title={movie?.Title}
             alt="poster"
           />
 
@@ -72,8 +71,10 @@ const MovieCard = ({ movie }) => {
               color: "white",
             }}
           >
-            <Typography variant="h6">{movie.Title}</Typography>
-            <Typography variant="body2">{movie.Year}</Typography>
+            <Typography variant="h6">{movie?.Title}</Typography>
+            <Typography variant="body2" component="h1">
+              {movie?.Year}
+            </Typography>
           </div>
         </ButtonBase>
       </Card>

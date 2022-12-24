@@ -2,53 +2,19 @@ import { Box, Link, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-const Navbar = ({
-  handleLocalSearch,
-  localSearchTerm,
-  setMovies,
-  setError,
-  setApiSearchTerm,
-  apiSearchTerm,
-}) => {
-  const [page, setPage] = useState(1);
-  const [debouncer, setDebouncer] = useState("");
-
-  const key = import.meta.env.VITE_APP_APIKEY;
+const Navbar = ({ handleLocalSearch, localSearchTerm, setApiSearchTerm }) => {
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     let delay = setTimeout(() => {
-      if (apiSearchTerm.length > 0) setDebouncer(apiSearchTerm);
-    }, 400);
+      setApiSearchTerm(search);
+    }, 250);
 
     return () => clearTimeout(delay);
-    if (apiSearchTerm.length > 0) handleApiSearch();
-  }, [apiSearchTerm]);
-
-  useEffect(() =>)
+  }, [search]);
 
   const handleChange = (event) => {
-    setApiSearchTerm(event.target.value);
-  };
-  const handleApiSearch = async (event) => {
-    setPage(1);
-    setMovies([]);
-    console.log("apiSearchTerm", apiSearchTerm);
-    try {
-      const response = await axios.get(
-        `http://www.omdbapi.com/?apikey=${key}&s=${apiSearchTerm}&page=${page}`
-      );
-      console.log("response", response);
-      if (response?.data?.Response === "False")
-        throw new Error(response.data.Error);
-      setError(null);
-      setMovies((prevMovies) => [
-        ...(prevMovies || []),
-        ...(response?.data?.Search || []),
-      ]);
-    } catch (error) {
-      setError(error.message);
-      // console.log("error", error.message);
-    }
+    setSearch(event.target.value);
   };
 
   return (
@@ -56,7 +22,7 @@ const Navbar = ({
       sx={{
         display: "flex",
         flexWrap: "wrap",
-        justifyContent: "flex-start",
+        justifyContent: "space-between",
         backgroundColor: "#3C2A21",
         color: "white",
         py: 2,
@@ -71,15 +37,9 @@ const Navbar = ({
       </a>
       <input
         type="text"
-        value={apiSearchTerm}
+        value={search}
         onChange={handleChange}
         placeholder="Search OMDb API..."
-      />
-      <input
-        type="text"
-        value={localSearchTerm}
-        onChange={handleLocalSearch}
-        placeholder="Search among fetched results..."
       />
     </Box>
   );
