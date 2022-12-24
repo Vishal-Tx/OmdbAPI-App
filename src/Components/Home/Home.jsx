@@ -17,6 +17,7 @@ const OmdbContainer = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [localSearchTerm, setLocalSearchTerm] = useState("");
+  const [apiSearchTerm, setApiSearchTerm] = useState("");
 
   //   console.log("data", data);
 
@@ -34,30 +35,38 @@ const OmdbContainer = () => {
   //   console.log("currYear", currYear);
   //   console.log("randomNumber", randomNumber);
   let sTerm = dict[randomNumber];
-  const key = process.env.REACT_APIKEY;
+  const key = import.meta.env.VITE_APP_APIKEY;
+  console.log("key", import.meta.env);
   useEffect(() => {
-    setIsLoading(true);
-    axios
-      .get(
-        `http://www.omddbapi.com/?apikey=${key}&y=${currYear}&s="${sTerm}"&type="movie"&page=${page}`
-      )
-      .then((response) => {
-        console.log("response", response);
-        if (response.data?.Response === "False") return setHasMore(false);
-        else setHasMore(true);
-        setMovies((prevMovies) => [...prevMovies, ...response?.data?.Search]);
-
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error(error);
-        setIsLoading(false);
-        setError("Something went wrong. Please try again!");
-      });
-    setMovies((prevMovies) => [...prevMovies, ...data]);
+    if (apiSearchTerm.length === 0) handleData();
+    // setMovies((prevMovies) => [...prevMovies, ...data]);
     // setMovies((prevMovies) => [...data]);
     // setHasMore(false);
-  }, [page]);
+  }, [page, apiSearchTerm]);
+
+  const handleData = async () => {
+    try {
+      if (!hasMore) return;
+      console.log("working...");
+      setIsLoading(true);
+      const response = await axios.get(
+        `http://www.omdbapi.com/?apikey=${key}&y=${currYear}&s="${sTerm}"&type="movie"&page=${page}`
+      );
+      if (movies.length === response.data?.totalResults) setHasMore(false);
+      console.log("response", response);
+
+      if (response.data?.Response === "False") return setHasMore(false);
+      else setHasMore(true);
+      setError(null);
+      setMovies((prevMovies) => [...prevMovies, ...response?.data?.Search]);
+
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
+      setError("Something went wrong. Please try again!");
+    }
+  };
 
   const handleLoadMore = () => {
     setPage((prevPage) => prevPage + 1);
@@ -77,7 +86,27 @@ const OmdbContainer = () => {
       <Navbar
         localSearchTerm={localSearchTerm}
         handleLocalSearch={handleLocalSearch}
+        setMovies={setMovies}
+        setError={setError}
+        apiSearchTerm={apiSearchTerm}
+        setApiSearchTerm={setApiSearchTerm}
       />
+      <Box
+        sx={{
+          ml: { lg: "50px" },
+          mt: "10px",
+          display: "flex",
+          justifyContent: { lg: "flex-start", xs: "center" },
+        }}
+      >
+        <Typography className="searchTitle" variant="h4">
+          Searching for{" "}
+          <span style={{ color: "white" }}>
+            {apiSearchTerm.length > 0 ? apiSearchTerm : sTerm}
+          </span>
+          <span style={{ color: "red" }}>*</span>
+        </Typography>
+      </Box>
       {error ? (
         <Box sx={{ textAlign: "center" }}>
           <Typography>{error}</Typography>
@@ -120,25 +149,12 @@ const OmdbContainer = () => {
           >
             <Box
               sx={{
-                ml: { lg: "50px" },
-                mt: "10px",
-                display: "flex",
-                justifyContent: { lg: "flex-start", xs: "center" },
-              }}
-            >
-              <Typography className="searchTitle" variant="h4">
-                Searching for "<span style={{ color: "white" }}>{sTerm}</span>"
-                <span style={{ color: "red" }}>*</span>
-              </Typography>
-            </Box>
-            <Box
-              sx={{
                 display: "flex",
                 flexWrap: "wrap",
                 justifyContent: "center",
               }}
             >
-              {filteredMovies.map((movie) => (
+              {filteredMovies?.map((movie) => (
                 <MovieCard movie={movie} key={movie.imdbID} />
               ))}{" "}
             </Box>

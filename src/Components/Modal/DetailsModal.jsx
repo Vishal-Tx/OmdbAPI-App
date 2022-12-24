@@ -30,23 +30,23 @@ export default function Details({ open, setOpen, imdbID }) {
   const [error, setError] = useState(null);
   useEffect(() => {
     setIsLoading(true);
-    // axios
-    //   .get(`http://www.omdbapi.com/?apikey=667984e7&i=${imdbID}`)
-    //   .then((response) => {
-    //     console.log("modal", response.data);
-    //     setDetails(response.data);
-    //     setIsLoading(false);
+    axios
+      .get(`http://www.omdbapi.com/?apikey=667984e7&i=${imdbID}`)
+      .then((response) => {
+        console.log("modal", response.data);
+        setDetails(response.data);
+        setIsLoading(false);
 
-    //     setIsLoading(false);
-    //     console.log("details", details);
-    //   })
-    //   .catch((error) => {
-    //     console.error("error", error);
-    //     setIsLoading(false);
-    //     setError("Something went wrong. Please Try Again!");
-    //   });
-    setDetails(data);
-    setIsLoading(false);
+        setIsLoading(false);
+        console.log("details", details);
+      })
+      .catch((error) => {
+        console.error("error", error);
+        setIsLoading(false);
+        setError("Something went wrong. Please Try Again!");
+      });
+    // setDetails(data);
+    // setIsLoading(false);
   }, []);
 
   return (
@@ -134,6 +134,7 @@ export default function Details({ open, setOpen, imdbID }) {
                 sx={{
                   backgroundSize: "contain",
                   width: "30%",
+                  borderRadius: "15px",
                 }}
                 component="img"
                 height="10%"
