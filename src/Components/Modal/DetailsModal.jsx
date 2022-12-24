@@ -27,26 +27,27 @@ export default function Details({ open, setOpen, imdbID }) {
   const handleClose = () => setOpen(false);
   const [details, setDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   useEffect(() => {
     setIsLoading(true);
-    axios
-      .get(`http://www.omdbapi.com/?apikey=667984e7&i=${imdbID}`)
-      .then((response) => {
-        console.log("modal", response.data);
-        setDetails(response.data);
-        setIsLoading(false);
+    // axios
+    //   .get(`http://www.omdbapi.com/?apikey=667984e7&i=${imdbID}`)
+    //   .then((response) => {
+    //     console.log("modal", response.data);
+    //     setDetails(response.data);
+    //     setIsLoading(false);
 
-        // setMovies((prevMovies) => [...prevMovies, ...response.data.Search]);
-        // setHasMore(response.data.Search.length > 0);
-        setIsLoading(false);
-        console.log("details", details);
-      })
-      .catch((error) => {
-        console.error("error", error);
-        setIsLoading(false);
-      });
+    //     setIsLoading(false);
+    //     console.log("details", details);
+    //   })
+    //   .catch((error) => {
+    //     console.error("error", error);
+    //     setIsLoading(false);
+    //     setError("Something went wrong. Please Try Again!");
+    //   });
+    setDetails(data);
+    setIsLoading(false);
   }, []);
-  // console.log("modalData", details);
 
   return (
     <div>
@@ -56,8 +57,10 @@ export default function Details({ open, setOpen, imdbID }) {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        {isLoading === null ? (
-          <Card>Loading...</Card>
+        {isLoading ? (
+          <Card sx={style}>Loading...</Card>
+        ) : !!error ? (
+          <Card sx={style}>{error}</Card>
         ) : (
           <Card sx={style}>
             <Box
