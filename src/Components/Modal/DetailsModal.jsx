@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { Card, CardMedia } from "@mui/material";
-import { GiDirectorChair } from "react-icons/Gi";
+import { GiDirectorChair } from "react-icons/gi";
 import { TbLanguage } from "react-icons/tb";
 import { FaPenNib } from "react-icons/fa";
 import { AiFillCloseCircle } from "react-icons/ai";
