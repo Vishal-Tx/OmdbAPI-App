@@ -1,8 +1,7 @@
 import { Box, Link, TextField, Typography } from "@mui/material";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-const Navbar = ({ handleLocalSearch, localSearchTerm, setApiSearchTerm }) => {
+const Navbar = ({ setApiSearchTerm }) => {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
@@ -40,13 +39,6 @@ const Navbar = ({ handleLocalSearch, localSearchTerm, setApiSearchTerm }) => {
       >
         <Typography variant="h4">Moviezzz</Typography>
       </Link>
-      {/* <input
-        type="text"
-        value={search}
-        onChange={handleChange}
-        placeholder="Search from OMDb API..."
-        style={{ width: "" }}
-      /> */}
       <TextField
         size="small"
         label="Search from OMDb API..."

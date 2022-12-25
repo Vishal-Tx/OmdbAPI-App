@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import data from "../../assets/modal.json";
 import { Card, CardMedia } from "@mui/material";
-import { GiDirectorChair, GiNuclearPlant } from "react-icons/gi";
+import { GiDirectorChair } from "react-icons/Gi";
 import { TbLanguage } from "react-icons/tb";
 import { FaPenNib } from "react-icons/fa";
-import axios from "axios";
 import { AiFillCloseCircle } from "react-icons/ai";
 import "./style.css";
 import { useDetails } from "../../hooks/useDetails";
@@ -35,11 +32,6 @@ export default function Details({ open, setOpen, imdbID }) {
   } = useDetails(`Details-${imdbID}`, imdbID);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  // useEffect(() => {
-
-  //   // setDetails(data);
-  //   // setIsLoading(false);
-  // }, []);
 
   return (
     <div>
@@ -79,9 +71,12 @@ export default function Details({ open, setOpen, imdbID }) {
                   <Typography
                     id="modal-title"
                     variant="h4"
-                    align="center"
                     m={1}
-                    sx={{ fontWeight: 600 }}
+                    sx={{
+                      fontWeight: 600,
+                      display: "flex",
+                      justifyContent: { xs: "center", md: "flex-start" },
+                    }}
                   >
                     {details?.Title}
                   </Typography>
@@ -94,6 +89,7 @@ export default function Details({ open, setOpen, imdbID }) {
                       fontWeight: 500,
                       display: "flex",
                       alignItems: "center",
+                      justifyContent: { xs: "center", md: "flex-start" },
                     }}
                   >
                     <GiDirectorChair size="2rem" />

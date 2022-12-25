@@ -1,16 +1,7 @@
 import React, { useState } from "react";
-import {
-  Card,
-  CardActions,
-  CardMedia,
-  CardContent,
-  Button,
-  Typography,
-  ButtonBase,
-} from "@mui/material";
+import { Card, CardMedia, Typography, ButtonBase } from "@mui/material";
 import "./style.css";
 import Details from "../Modal/DetailsModal";
-import axios from "axios";
 
 const MovieCard = ({ movie }) => {
   const [isLoading, setIsLoading] = useState(false);

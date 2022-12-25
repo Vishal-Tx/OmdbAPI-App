@@ -1,16 +1,8 @@
 import InfiniteScroll from "react-infinite-scroll-component";
 
-import React, { useState, useEffect, useMemo } from "react";
-import axios from "axios";
-import data from "../../assets/data.json";
+import React, { useState, useMemo } from "react";
 import MovieCard from "../Card/MovieCard";
-import {
-  Box,
-  CircularProgress,
-  Input,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, TextField, Typography } from "@mui/material";
 import Navbar from "../Navbar/Navbar";
 
 import "./style.css";
@@ -22,10 +14,21 @@ const OmdbContainer = () => {
   const [apiSearchTerm, setApiSearchTerm] = useState("");
 
   const randomNumber = useMemo(() => {
-    return Math.floor(Math.random() * 5);
+    return Math.floor(Math.random() * 10);
   }, []);
 
-  const dict = ["Love", "war", "red", "heart", "Black"];
+  const dict = [
+    "Love",
+    "war",
+    "red",
+    "heart",
+    "Black",
+    "stone",
+    "alone",
+    "christmas",
+    "dragon",
+    "fight",
+  ];
 
   let sTerm = dict[randomNumber];
 
@@ -33,10 +36,6 @@ const OmdbContainer = () => {
     `Movies-${apiSearchTerm || sTerm}`,
     { s: apiSearchTerm || sTerm }
   );
-
-  // useEffect(() => {
-  //   if (apiSearchTerm.length === 0) setApiSearchTerm(sTerm);
-  // }, [apiSearchTerm]);
 
   const filteredMovies = movies.filter((movie) => {
     const regex = new RegExp(localSearchTerm, "i");
@@ -75,13 +74,6 @@ const OmdbContainer = () => {
       ) : (
         <div>
           <Box sx={{ display: "flex", justifyContent: "center" }}>
-            {/* <Input
-              style={{ margin: "auto" }}
-              type="text"
-              value={localSearchTerm}
-              onChange={handleLocalSearch}
-              placeholder="Search among fetched results..."
-            /> */}
             <TextField
               size="small"
               label="Filter Results"
@@ -100,18 +92,6 @@ const OmdbContainer = () => {
                 },
               }}
             />
-            {/* <input
-            type="text"
-            value={apiSearchTerm}
-            onChange={handleApiSearch}
-            placeholder="Search OMDb API..."
-          /> */}
-            {/* <input
-              type="text"
-              value={localSearchTerm}
-              onChange={handleLocalSearch}
-              placeholder="Search among fetched results..."
-            /> */}
           </Box>
           <InfiniteScroll
             dataLength={filteredMovies?.length}
