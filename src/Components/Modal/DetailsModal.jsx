@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import data from "../../assets/modal.json";
 import { Card, CardMedia } from "@mui/material";
-import { GiDirectorChair, GiNuclearPlant } from "react-icons/Gi";
+import { GiDirectorChair, GiNuclearPlant } from "react-icons/gi";
 import { TbLanguage } from "react-icons/tb";
 import { FaPenNib } from "react-icons/fa";
 import axios from "axios";
@@ -18,7 +18,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: { xs: "90%", lg: "auto" },
+  width: { xs: "90%", lg: "1100px" },
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
@@ -42,6 +42,7 @@ export default function Details({ open, setOpen, imdbID }) {
   return (
     <div>
       <Modal
+        disableScrollLock
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -70,7 +71,7 @@ export default function Details({ open, setOpen, imdbID }) {
                 sx={{
                   display: "flex",
                   justifyContent: "space-between",
-                  flexWrap: "wrap-reverse",
+                  flexWrap: { lg: "nowrap", xs: "wrap-reverse" },
                 }}
               >
                 <Box sx={{ mx: { xs: "auto", lg: "0" } }}>
