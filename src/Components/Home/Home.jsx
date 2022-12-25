@@ -15,15 +15,11 @@ import Navbar from "../Navbar/Navbar";
 
 import "./style.css";
 import { useMovie } from "../../hooks/useMovie";
+import Loader from "../Loader/Loader";
 
 const OmdbContainer = () => {
   const [localSearchTerm, setLocalSearchTerm] = useState("");
   const [apiSearchTerm, setApiSearchTerm] = useState("");
-
-  const { movies, hasNextPage, fetchNextPage, error } = useMovie(
-    `Movies-${apiSearchTerm}`,
-    { s: apiSearchTerm }
-  );
 
   const randomNumber = useMemo(() => {
     return Math.floor(Math.random() * 5);
@@ -33,9 +29,14 @@ const OmdbContainer = () => {
 
   let sTerm = dict[randomNumber];
 
-  useEffect(() => {
-    if (apiSearchTerm.length === 0) setApiSearchTerm(sTerm);
-  }, [apiSearchTerm]);
+  const { movies, hasNextPage, fetchNextPage, error, isLoading } = useMovie(
+    `Movies-${apiSearchTerm || sTerm}`,
+    { s: apiSearchTerm || sTerm }
+  );
+
+  // useEffect(() => {
+  //   if (apiSearchTerm.length === 0) setApiSearchTerm(sTerm);
+  // }, [apiSearchTerm]);
 
   const filteredMovies = movies.filter((movie) => {
     const regex = new RegExp(localSearchTerm, "i");
@@ -69,6 +70,8 @@ const OmdbContainer = () => {
         <Box sx={{ textAlign: "center" }}>
           <Typography>{error?.message ?? ""}</Typography>
         </Box>
+      ) : isLoading ? (
+        <Loader />
       ) : (
         <div>
           <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -114,16 +117,7 @@ const OmdbContainer = () => {
             dataLength={filteredMovies?.length}
             next={fetchNextPage}
             hasMore={hasNextPage && localSearchTerm.length === 0}
-            loader={
-              <Box
-                sx={{
-                  height: "50px",
-                  textAlign: "center",
-                }}
-              >
-                <CircularProgress sixe={100} />
-              </Box>
-            }
+            loader={<Loader />}
           >
             <Box
               sx={{

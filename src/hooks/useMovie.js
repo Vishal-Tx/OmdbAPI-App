@@ -1,11 +1,11 @@
 import axios from "axios";
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 export const useMovie = (key, args) => {
   const apiKey = import.meta.env.VITE_APP_APIKEY;
   const rootUrl = "http://www.omdbapi.com/";
   const response = useInfiniteQuery(
-    key,
+    [key],
     async ({ pageParam = 1 }) => {
       const params = { apikey: apiKey, page: pageParam, ...args };
       const qs = new URLSearchParams(params);
@@ -22,6 +22,9 @@ export const useMovie = (key, args) => {
         return undefined;
       },
       refetchOnWindowFocus: false,
+      retry: false,
+      cacheTime: 100000,
+      staleTime: 100000,
     }
   );
   const totalResponse = response?.data?.pages

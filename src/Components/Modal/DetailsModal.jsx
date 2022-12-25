@@ -6,11 +6,12 @@ import Modal from "@mui/material/Modal";
 import data from "../../assets/modal.json";
 import { Card, CardMedia } from "@mui/material";
 import { GiDirectorChair, GiNuclearPlant } from "react-icons/Gi";
-import { TbLanguage } from "react-icons/Tb";
-import { FaPenNib } from "react-icons/Fa";
+import { TbLanguage } from "react-icons/tb";
+import { FaPenNib } from "react-icons/fa";
 import axios from "axios";
-import { AiFillCloseCircle } from "react-icons/Ai";
+import { AiFillCloseCircle } from "react-icons/ai";
 import "./style.css";
+import { useDetails } from "../../hooks/useDetails";
 
 const style = {
   position: "absolute",
@@ -25,31 +26,18 @@ const style = {
 };
 
 export default function Details({ open, setOpen, imdbID }) {
+  const {
+    data: details,
+    error,
+    isLoading,
+  } = useDetails(`Details-${imdbID}`, imdbID);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [details, setDetails] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  useEffect(() => {
-    setIsLoading(true);
-    axios
-      .get(`http://www.omdbapi.com/?apikey=667984e7&i=${imdbID}`)
-      .then((response) => {
-        console.log("modal", response.data);
-        setDetails(response.data);
-        setIsLoading(false);
+  // useEffect(() => {
 
-        setIsLoading(false);
-        console.log("details", details);
-      })
-      .catch((error) => {
-        console.error("error", error);
-        setIsLoading(false);
-        setError("Something went wrong. Please Try Again!");
-      });
-    // setDetails(data);
-    // setIsLoading(false);
-  }, []);
+  //   // setDetails(data);
+  //   // setIsLoading(false);
+  // }, []);
 
   return (
     <div>
