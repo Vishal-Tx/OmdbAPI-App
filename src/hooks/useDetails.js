@@ -3,7 +3,7 @@ import axios from "axios";
 
 const getDetail = async (id) => {
   const apiKey = import.meta.env.VITE_APP_APIKEY;
-  const rootUrl = "http://www.omdbapi.com/";
+  const rootUrl = "https://www.omdbapi.com/";
 
   return await axios.get(`${rootUrl}?apikey=${apiKey}&i=${id}`);
 };

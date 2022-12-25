@@ -3,7 +3,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 
 export const useMovie = (key, args) => {
   const apiKey = import.meta.env.VITE_APP_APIKEY;
-  const rootUrl = "http://www.omdbapi.com/";
+  const rootUrl = "https://www.omdbapi.com/";
   const response = useInfiniteQuery(
     [key],
     async ({ pageParam = 1 }) => {
