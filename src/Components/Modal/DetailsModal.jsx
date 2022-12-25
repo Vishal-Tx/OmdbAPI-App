@@ -20,6 +20,8 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: { xs: "90%", lg: "810px" },
   bgcolor: "background.paper",
+  maxHeight: "90%",
+  overflowY: "scroll",
   boxShadow: 24,
   p: 4,
   backgroundColor: "#D0B8A8",
@@ -42,15 +44,14 @@ export default function Details({ open, setOpen, imdbID }) {
   return (
     <div>
       <Modal
-        disableScrollLock
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        sx={{ marginBlock: "2rem" }}
       >
         <Card sx={style}>
           <Box
-            mt={-2}
             mb={1}
             mr={1}
             sx={{ display: "flex", justifyContent: "flex-end" }}

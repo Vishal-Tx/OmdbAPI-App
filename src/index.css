@@ -3,6 +3,11 @@
   border: 0;
   box-sizing: border-box;
 }
+::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+
 body {
   background-color: #d0b8a8;
 }
