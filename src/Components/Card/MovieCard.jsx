@@ -4,13 +4,10 @@ import "./style.css";
 import Details from "../Modal/DetailsModal";
 
 const MovieCard = ({ movie }) => {
-  const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [imdbID, setImdbID] = useState(null);
   const openModal = () => {
     setOpen(true);
-    setIsLoading(true);
-    // console.log("movie.imdbID", movie.imdbID);
     setImdbID(movie?.imdbID);
   };
   if (!movie) return <></>;

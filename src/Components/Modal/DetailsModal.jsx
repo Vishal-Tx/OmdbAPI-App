@@ -30,7 +30,6 @@ export default function Details({ open, setOpen, imdbID }) {
     error,
     isLoading,
   } = useDetails(`Details-${imdbID}`, imdbID);
-  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
