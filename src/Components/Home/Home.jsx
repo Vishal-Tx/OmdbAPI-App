@@ -85,7 +85,7 @@ const OmdbContainer = () => {
             <TextField
               size="small"
               label="Filter Results"
-              id="fullWidth"
+              variant="filled"
               value={localSearchTerm}
               onChange={handleLocalSearch}
               sx={{

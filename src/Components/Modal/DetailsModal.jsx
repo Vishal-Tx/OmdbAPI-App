@@ -75,18 +75,20 @@ export default function Details({ open, setOpen, imdbID }) {
                   flexWrap: { lg: "nowrap", xs: "wrap-reverse" },
                 }}
               >
-                <Box sx={{ mx: { xs: "auto", lg: "0" } }}>
+                <Box sx={{ mx: { xs: "auto", md: "0" } }}>
                   <Typography
-                    id="modal-modal-title"
+                    id="modal-title"
                     variant="h4"
+                    align="center"
                     m={1}
                     sx={{ fontWeight: 600 }}
                   >
                     {details?.Title}
                   </Typography>
                   <Typography
-                    id="modal-modal-title"
+                    id="modal-director"
                     variant="h6"
+                    align="center"
                     m={1}
                     sx={{
                       fontWeight: 500,
@@ -98,18 +100,18 @@ export default function Details({ open, setOpen, imdbID }) {
                     {details?.Director}
                   </Typography>
                   <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
-                    <Typography id="modal-modal-title" variant="body1" m={1}>
+                    <Typography id="modal-released" variant="body1" m={1}>
                       {details?.Released}
                     </Typography>
-                    <Typography id="modal-modal-title" variant="body1" m={1}>
+                    <Typography id="modal-runtime" variant="body1" m={1}>
                       {details?.Runtime}
                     </Typography>
-                    <Typography id="modal-modal-title" variant="body1" m={1}>
+                    <Typography id="modal-gnere" variant="body1" m={1}>
                       {details?.Genre.replace(/,/g, " |")}
                     </Typography>
                   </Box>
                   <Typography
-                    id="modal-modal-title"
+                    id="modal-actors"
                     variant="body1"
                     m={1}
                     mb={2}
@@ -119,7 +121,7 @@ export default function Details({ open, setOpen, imdbID }) {
                   </Typography>
 
                   <Typography
-                    id="modal-modal-title"
+                    id="modal-writer"
                     variant="body1"
                     m={1}
                     sx={{ display: "flex", alignItems: "center" }}
@@ -128,7 +130,7 @@ export default function Details({ open, setOpen, imdbID }) {
                     {details?.Writer}
                   </Typography>
                   <Typography
-                    id="modal-modal-title"
+                    id="modal-language"
                     variant="body1"
                     m={1}
                     sx={{ display: "flex", alignItems: "center" }}
@@ -149,14 +151,10 @@ export default function Details({ open, setOpen, imdbID }) {
                 />
               </Box>
               <Box>
-                <Typography id="modal-modal-title" variant="body1" m={1}>
+                <Typography id="modal-plot" variant="body1" m={1}>
                   Summary: {details?.Plot}
                 </Typography>
               </Box>
-              <Typography
-                id="modal-modal-description"
-                sx={{ mt: 2 }}
-              ></Typography>
             </>
           )}
         </Card>

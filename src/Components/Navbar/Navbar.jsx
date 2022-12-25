@@ -1,4 +1,4 @@
-import { Box, Link, Typography } from "@mui/material";
+import { Box, Link, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -22,24 +22,45 @@ const Navbar = ({ handleLocalSearch, localSearchTerm, setApiSearchTerm }) => {
       sx={{
         display: "flex",
         flexWrap: "wrap",
-        justifyContent: "space-between",
+        justifyContent: { xs: "center", sm: "space-between" },
         backgroundColor: "#3C2A21",
         color: "white",
         py: 2,
         px: 6,
       }}
     >
-      <a
+      <Link
         href="/"
-        style={{ textDecoration: "none", color: "white", marginRight: "15px" }}
+        sx={{
+          textDecoration: "none",
+          color: "white",
+          marginRight: "15px",
+          marginBottom: { xs: "10px", sm: "0" },
+        }}
       >
         <Typography variant="h4">Moviezzz</Typography>
-      </a>
-      <input
+      </Link>
+      {/* <input
         type="text"
         value={search}
         onChange={handleChange}
-        placeholder="Search OMDb API..."
+        placeholder="Search from OMDb API..."
+        style={{ width: "" }}
+      /> */}
+      <TextField
+        size="small"
+        label="Search from OMDb API..."
+        variant="filled"
+        value={search}
+        onChange={handleChange}
+        sx={{
+          backgroundColor: "white",
+          color: "black",
+          borderRadius: "4px",
+          "& label.Mui-focused": {
+            color: "#3C2A21",
+          },
+        }}
       />
     </Box>
   );
