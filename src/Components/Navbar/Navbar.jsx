@@ -6,8 +6,9 @@ const Navbar = ({ setApiSearchTerm }) => {
 
   useEffect(() => {
     let delay = setTimeout(() => {
+      if (search.length == 0) return;
       setApiSearchTerm(search);
-    }, 250);
+    }, 0);
 
     return () => clearTimeout(delay);
   }, [search]);
